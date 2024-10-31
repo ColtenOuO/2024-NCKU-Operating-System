@@ -76,7 +76,7 @@ int pwd(char **args)
     } else {
         perror("pwd");
     }
-    return 1;
+    return 0;
 }
 
 int echo(char **args)
