@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
-#include <time.h>  // 用於時間測量
+#include <time.h>
 
 typedef struct {
     long mtype;
@@ -68,23 +68,23 @@ int main(int argc, char* argv[]) {
     }
 
     if (mailbox.flag == 1) {
-        key_t key = ftok("receiver.c", 'B');
+        key_t key = ftok("receiver.c", 'B'); // 跟 receiver 生一個同樣的 key 
         if (key == -1) {
             perror("ftok failed");
             exit(1);
         }
-        mailbox.storage.msqid = msgget(key, 0666 | IPC_CREAT);
+        mailbox.storage.msqid = msgget(key, 0666 | IPC_CREAT); // rwx
         if (mailbox.storage.msqid == -1) {
             perror("msgget failed");
             exit(1);
         }
     } else if (mailbox.flag == 2) {
-        int shm_fd = shm_open("/shm_comm", O_CREAT | O_RDWR, 0666);
+        int shm_fd = shm_open("/shm_comm", O_CREAT | O_RDWR, 0666); //rwx
         if (shm_fd == -1) {
             perror("shm_open failed");
             exit(1);
         }
-        ftruncate(shm_fd, sizeof(message_t)); 
+        ftruncate(shm_fd, sizeof(message_t));  // share memory size
         mailbox.storage.shm_addr = mmap(0, sizeof(message_t), PROT_WRITE, MAP_SHARED, shm_fd, 0);
         if (mailbox.storage.shm_addr == MAP_FAILED) {
             perror("mmap failed");

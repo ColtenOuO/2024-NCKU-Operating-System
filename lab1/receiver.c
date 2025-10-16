@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include <sys/stat.h>
-#include <time.h>  // 用於時間測量
+#include <time.h>
 
 typedef struct {
     long mtype;
